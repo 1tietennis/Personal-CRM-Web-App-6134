@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import * as FiIcons from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 import { useCRM } from '../context/CRMContext';
+import CRMSocialDashboard from '../components/CRMSocialDashboard';
 import { format, subDays, isAfter } from 'date-fns';
 
-const { FiUsers, FiMessageCircle, FiTrendingUp, FiCalendar, FiPhone, FiMail, FiVideo } = FiIcons;
+const { FiUsers, FiMessageCircle, FiTrendingUp, FiCalendar, FiPhone, FiMail, FiVideo, FiZap } = FiIcons;
 
 function Dashboard() {
   const { state } = useCRM();
@@ -13,10 +14,10 @@ function Dashboard() {
 
   // Calculate stats
   const totalContacts = contacts.length;
-  const recentInteractions = interactions.filter(interaction => 
+  const recentInteractions = interactions.filter(interaction =>
     isAfter(new Date(interaction.date), subDays(new Date(), 7))
   ).length;
-  
+
   const interactionTypes = interactions.reduce((acc, interaction) => {
     acc[interaction.type] = (acc[interaction.type] || 0) + 1;
     return acc;
@@ -39,17 +40,19 @@ function Dashboard() {
     },
     {
       name: 'This Month',
-      value: interactions.filter(i => new Date(i.date).getMonth() === new Date().getMonth()).length,
+      value: interactions.filter(i =>
+        new Date(i.date).getMonth() === new Date().getMonth()
+      ).length,
       icon: FiTrendingUp,
       color: 'bg-purple-500',
       change: '+23%',
     },
     {
-      name: 'Follow-ups Due',
-      value: Math.floor(Math.random() * 5) + 1,
-      icon: FiCalendar,
+      name: 'Social Integration',
+      value: 'Active',
+      icon: FiZap,
       color: 'bg-orange-500',
-      change: '-2%',
+      change: 'Live',
     },
   ];
 
@@ -75,7 +78,7 @@ function Dashboard() {
     >
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's what's happening with your contacts.</p>
+        <p className="text-gray-600">Welcome back! Here's what's happening with your contacts and social media integration.</p>
       </div>
 
       {/* Stats Grid */}
@@ -92,8 +95,10 @@ function Dashboard() {
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">{stat.name}</p>
                 <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className={`text-sm ${stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'} mt-1`}>
-                  {stat.change} from last month
+                <p className={`text-sm ${
+                  stat.change.startsWith('+') || stat.change === 'Live' ? 'text-green-600' : 'text-red-600'
+                } mt-1`}>
+                  {stat.change} {stat.change !== 'Live' ? 'from last month' : ''}
                 </p>
               </div>
               <div className={`${stat.color} p-3 rounded-lg`}>
@@ -103,6 +108,16 @@ function Dashboard() {
           </motion.div>
         ))}
       </div>
+
+      {/* CRM Social Integration Dashboard */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="mb-8"
+      >
+        <CRMSocialDashboard />
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Activity */}
