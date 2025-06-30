@@ -1,19 +1,20 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import * as FiIcons from 'react-icons/fi';
-import SafeIcon from '../common/SafeIcon';
-
-const { FiHome, FiUsers, FiMessageCircle, FiBarChart3, FiMenu, FiX, FiInstagram, FiSettings, FiCalendar } = FiIcons;
+import * as Icons from 'lucide-react';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: FiHome },
-  { name: 'Contacts', href: '/contacts', icon: FiUsers },
-  { name: 'Interactions', href: '/interactions', icon: FiMessageCircle },
-  { name: 'Social Media', href: '/social-media', icon: FiInstagram },
-  { name: 'Content Calendar', href: '/content-calendar', icon: FiCalendar },
-  { name: 'Analytics', href: '/analytics', icon: FiBarChart3 },
-  { name: 'Settings', href: '/settings', icon: FiSettings },
+  { name: 'Dashboard', href: '/dashboard', icon: Icons.BarChart3 },
+  { name: 'Keywords', href: '/keywords', icon: Icons.Search },
+  { name: 'Rankings', href: '/rankings', icon: Icons.TrendingUp },
+  { name: 'Competition', href: '/competition', icon: Icons.Users },
+  { name: 'Content Strategy', href: '/content', icon: Icons.FileText },
+  { name: 'Local SEO', href: '/local-seo', icon: Icons.MapPin },
+  { name: 'Analytics', href: '/analytics', icon: Icons.LineChart },
+  { name: 'Clients', href: '/clients', icon: Icons.Building },
+  { name: 'Profit Margins', href: '/margins', icon: Icons.DollarSign },
+  { name: 'Reports', href: '/reports', icon: Icons.FileBarChart },
+  { name: 'Settings', href: '/settings', icon: Icons.Settings }
 ];
 
 function Sidebar({ isOpen, setIsOpen }) {
@@ -23,9 +24,9 @@ function Sidebar({ isOpen, setIsOpen }) {
     <>
       {/* Mobile overlay */}
       {isOpen && (
-        <div
-          className="fixed inset-0 z-40 lg:hidden bg-black bg-opacity-50"
-          onClick={() => setIsOpen(false)}
+        <div 
+          className="fixed inset-0 z-40 lg:hidden bg-black bg-opacity-50" 
+          onClick={() => setIsOpen(false)} 
         />
       )}
 
@@ -46,9 +47,9 @@ function Sidebar({ isOpen, setIsOpen }) {
             {isOpen && (
               <>
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <SafeIcon icon={FiUsers} className="w-5 h-5 text-white" />
+                  <Icons.Search className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-xl font-bold text-gray-900">Personal CRM</span>
+                <span className="text-xl font-bold text-gray-900">SEO Pro</span>
               </>
             )}
           </motion.div>
@@ -57,7 +58,11 @@ function Sidebar({ isOpen, setIsOpen }) {
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <SafeIcon icon={isOpen ? FiX : FiMenu} className="w-5 h-5 text-gray-600" />
+            {isOpen ? (
+              <Icons.X className="w-5 h-5 text-gray-600" />
+            ) : (
+              <Icons.Menu className="w-5 h-5 text-gray-600" />
+            )}
           </button>
         </div>
 
@@ -65,6 +70,8 @@ function Sidebar({ isOpen, setIsOpen }) {
           <div className="space-y-2">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
+              const IconComponent = item.icon;
+              
               return (
                 <Link
                   key={item.name}
@@ -75,9 +82,12 @@ function Sidebar({ isOpen, setIsOpen }) {
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
-                  <SafeIcon
-                    icon={item.icon}
-                    className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`}
+                  <IconComponent
+                    className={`w-5 h-5 ${
+                      isActive 
+                        ? 'text-blue-600' 
+                        : 'text-gray-400 group-hover:text-gray-600'
+                    }`}
                   />
                   <motion.span
                     initial={false}

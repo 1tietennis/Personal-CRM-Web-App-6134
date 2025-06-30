@@ -5,13 +5,17 @@ import SafeIcon from '../common/SafeIcon';
 import { useSocialMedia } from '../context/SocialMediaContext';
 import PostCreator from '../components/PostCreator';
 import AIContentGenerator from '../components/AIContentGenerator';
+import AIAutoResponder from '../components/AIAutoResponder';
 import SocialAccountManager from '../components/SocialAccountManager';
 import PostAnalytics from '../components/PostAnalytics';
 import MultiPlatformManager from '../components/MultiPlatformManager';
 import PlatformVerificationDashboard from '../components/PlatformVerificationDashboard';
 import ConnectionTestSuite from '../components/ConnectionTestSuite';
 
-const { FiPlus, FiZap, FiSettings, FiBarChart3, FiGlobe, FiShield, FiActivity, FiInstagram, FiTwitter, FiFacebook, FiLinkedin } = FiIcons;
+const {
+  FiPlus, FiZap, FiSettings, FiBarChart3, FiGlobe, FiShield, FiActivity,
+  FiInstagram, FiTwitter, FiFacebook, FiLinkedin, FiBot
+} = FiIcons;
 
 function SocialMedia() {
   const { state } = useSocialMedia();
@@ -23,6 +27,7 @@ function SocialMedia() {
   const tabs = [
     { id: 'verification', name: 'Verification', icon: FiShield },
     { id: 'testing', name: 'Test Suite', icon: FiActivity },
+    { id: 'autoresponder', name: 'Auto-Responder', icon: FiBot },
     { id: 'create', name: 'Create Post', icon: FiPlus },
     { id: 'ai', name: 'AI Generator', icon: FiZap },
     { id: 'automation', name: 'Multi-Platform', icon: FiGlobe },
@@ -69,7 +74,9 @@ function SocialMedia() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Social Media Management</h1>
-            <p className="text-gray-600">Verify connections, create content, and manage your social media presence with AI-powered automation</p>
+            <p className="text-gray-600">
+              Verify connections, create content, automate responses, and manage your social media presence with AI-powered automation
+            </p>
           </div>
           <div className="flex space-x-3 mt-4 sm:mt-0">
             <motion.button
@@ -138,11 +145,11 @@ function SocialMedia() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">AI Posts Generated</p>
-              <p className="text-2xl font-bold text-gray-900">{posts.filter(p => p.aiGenerated).length}</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">Auto-Responder</p>
+              <p className="text-2xl font-bold text-purple-600">🤖 Active</p>
             </div>
             <div className="bg-purple-100 p-3 rounded-lg">
-              <SafeIcon icon={FiZap} className="w-6 h-6 text-purple-600" />
+              <SafeIcon icon={FiBot} className="w-6 h-6 text-purple-600" />
             </div>
           </div>
         </motion.div>
@@ -211,6 +218,17 @@ function SocialMedia() {
           </motion.div>
         )}
 
+        {activeTab === 'autoresponder' && (
+          <motion.div
+            key="autoresponder"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+          >
+            <AIAutoResponder />
+          </motion.div>
+        )}
+
         {activeTab === 'create' && (
           <motion.div
             key="create"
@@ -233,13 +251,19 @@ function SocialMedia() {
                     >
                       {post.media && (
                         <div className="mb-3">
-                          <img src={post.media} alt="Post content" className="w-full h-40 object-cover rounded-lg" />
+                          <img
+                            src={post.media}
+                            alt="Post content"
+                            className="w-full h-40 object-cover rounded-lg"
+                          />
                         </div>
                       )}
-                      
                       <div className="flex items-center space-x-2 mb-2">
                         {post.platforms?.map((platform) => (
-                          <div key={platform} className={`w-6 h-6 rounded-full bg-gradient-to-r ${getPlatformColor(platform)} flex items-center justify-center`}>
+                          <div
+                            key={platform}
+                            className={`w-6 h-6 rounded-full bg-gradient-to-r ${getPlatformColor(platform)} flex items-center justify-center`}
+                          >
                             <SafeIcon icon={getPlatformIcon(platform)} className="w-3 h-3 text-white" />
                           </div>
                         ))}
@@ -255,7 +279,6 @@ function SocialMedia() {
                           </span>
                         )}
                       </div>
-                      
                       <p className="text-gray-800 text-sm line-clamp-3 mb-2">{post.content}</p>
                       <p className="text-xs text-gray-500">
                         {new Date(post.createdAt).toLocaleDateString()}
